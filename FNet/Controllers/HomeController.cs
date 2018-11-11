@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 
-namespace DeliverySchedule.Controllers
+namespace FNet.Controllers
 {
     public class HomeController : Controller
     {
