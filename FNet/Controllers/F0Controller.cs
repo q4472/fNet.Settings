@@ -1,10 +1,10 @@
-﻿using MvcApplication2.Areas.Settings.Models;
+﻿using FNet.Settings.Models;
 using Nskd;
 using System;
 using System.IO;
 using System.Web.Mvc;
 
-namespace MvcApplication2.Areas.Settings.Controllers
+namespace FNet.Settings.Controllers
 {
     public class F0Controller : Controller
     {
