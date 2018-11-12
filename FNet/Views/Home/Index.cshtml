@@ -2,3 +2,25 @@
 {
     <div>Debugging is enabled.</div>
 }
+<div id="fnet_settings_home_index">
+    <input type="button" value="Settings" onclick="FnetSettingsHomeIndex.goToSettings();" />
+</div>
+<script type="text/javascript">
+    var FnetSettingsHomeIndex = (function () {
+        return {
+            goToSettings: function () {
+                var rqp = {
+                    SessionId: 'qaz'//Nskd.Server.SessionId
+                };
+                Nskd.Http.post({
+                    url: 'settings/f0',
+                    rqp: rqp,
+                    done: function (data) {
+                        //alert(data);
+                        $('#_layout_content').html(data);
+                    }
+                });
+            }
+        };
+    })();
+</script>

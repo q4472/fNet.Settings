@@ -1,23 +1,26 @@
 ﻿using FNet.Settings.Models;
 using Nskd;
 using System;
-using System.IO;
 using System.Web.Mvc;
 
 namespace FNet.Settings.Controllers
 {
     public class F0Controller : Controller
     {
-        public ActionResult Index(Guid sessionId)
+        public Object Index()
         {
-            String settingsDsAsJsonString = F0Model.Get(sessionId);
-            return PartialView("~/Areas/Settings/Views/F0/Index.cshtml", settingsDsAsJsonString);
+            if (Request.RequestType != "POST") { return ""; }
+            RequestPackage rqp = RequestPackage.ParseRequest(Request.InputStream, Request.ContentEncoding);
+            String settingsDsAsJsonString = F0Model.Get(rqp.SessionId);
+            return PartialView("~/Views/F0/Index.cshtml", settingsDsAsJsonString);
         }
+        /*
         public Object Save()
         {
             RequestPackage rqp = RequestPackage.ParseRequest(Request.InputStream, Request.ContentEncoding);
             String settingsDsAsJsonString = F0Model.Set(rqp);
             return settingsDsAsJsonString;
         }
+        */
     }
 }
