@@ -9,10 +9,13 @@ namespace FNet.Settings.Controllers
     {
         public Object Index()
         {
+            Object v = null;
             if (Request.RequestType != "POST") { return ""; }
             RequestPackage rqp = RequestPackage.ParseRequest(Request.InputStream, Request.ContentEncoding);
             String settingsDsAsJsonString = F0Model.Get(rqp.SessionId);
-            return PartialView("~/Views/F0/Index.cshtml", settingsDsAsJsonString);
+            settingsDsAsJsonString = settingsDsAsJsonString.Replace("\"", "'");
+            v = PartialView("~/Views/F0/Index.cshtml", settingsDsAsJsonString);
+            return v;
         }
         /*
         public Object Save()

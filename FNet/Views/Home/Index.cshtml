@@ -10,10 +10,10 @@
         return {
             goToSettings: function () {
                 var rqp = {
-                    SessionId: 'qaz'//Nskd.Server.SessionId
+                    SessionId: Nskd.Server.SessionId
                 };
                 Nskd.Http.post({
-                    url: 'settings/f0',
+                    url: '/settings/f0/',
                     rqp: rqp,
                     done: function (data) {
                         //alert(data);

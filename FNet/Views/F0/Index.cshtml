@@ -1,12 +1,11 @@
 ﻿@model String
 <style type="text/css">
-    #p_settings_f0 td {
+    #fnet_settings_f0 td {
         padding: 2px;
     }
 </style>
-<div id="p_settings_f0">
-    <div>@Model</div>
-    <input type="hidden" id="fnet_settings_f0_data" value="{}" />
+<div id="fnet_settings_f0">
+    <input type="hidden" id="fnet_settings_f0_data" value="@Html.Raw(Model)" />
     <table>
         <tr>
             <td colspan="3">Шрифт для выгрузки в Excel</td>
@@ -24,10 +23,11 @@
             <td style="text-align: right">Размер</td>
             <td>
                 <input type="text" name="[Шрифт для выгрузки в Excel].[Размер]" value=""
-                       style="width: 200px;"
-                       onchange="Nskd.Validator.nNorm(this);" />
+                       style="width: 200px; text-align: right; width: 30px"
+                       onchange="Nskd.Validator.nNorm(this);" /><span>pt</span>
             </td>
         </tr>
+        <tr><td>&nbsp;</td></tr>
         <tr>
             <td colspan="3">Масштаб для выгрузки в Excel</td>
         </tr>
@@ -36,19 +36,29 @@
             <td style="text-align: right">Общий</td>
             <td>
                 <input type="text" name="[Масштаб для выгрузки в Excel].[Общий]" value=""
-                       style="width: 200px;"
-                       onchange="Nskd.Validator.nNorm(this);" />
+                       style="width: 200px; text-align: right; width: 30px"
+                       onchange="Nskd.Validator.nNorm(this);" /><span>%</span>
             </td>
         </tr>
+        <tr><td>&nbsp;</td></tr>
         <tr>
             <td colspan="2" style="width: 100px">Использовать архив при поиске лекарственных средств</td>
-            <td>
+            <td style="vertical-align: bottom">
                 <input type="checkbox" />
             </td>
         </tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr>
+            <td colspan="2" style="width: 100px">Скидка при оформлении передачи из ООО "Фарм-Сиб" в ООО "Гарза"</td>
+            <td style="vertical-align: bottom">
+                <input type="text" value="5" style="width: 30px; text-align: right" /><span>%</span>
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
         <tr>
             <td><input type="button" value="Сохранить" disabled="disabled" onclick="SettingsF0.save();" /></td>
         </tr>
+        <tr><td>&nbsp;</td></tr>
     </table>
 </div>
 <script type="text/javascript">
@@ -56,9 +66,9 @@
 
         var ds = eval('(' + $('#fnet_settings_f0_data').val() + ')');
         var dt = (ds && ds.tables && ds.tables.length > 0) ? ds.tables[0] : null;
-        var inputs = $('#p_settings_f0 input[type="text"]');
-        var inputArch = $('#p_settings_f0 input[type="checkbox"]');
-        var saveButton = $('#p_settings_f0 input[type="button"][value="Сохранить"]');
+        var inputs = $('#fnet_settings_f0 input[type="text"]');
+        var inputArch = $('#fnet_settings_f0 input[type="checkbox"]');
+        var saveButton = $('#fnet_settings_f0 input[type="button"][value="Сохранить"]');
 
         inputs.keyup(function () {
             saveButton.prop("disabled", false);
