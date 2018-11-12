@@ -22,9 +22,8 @@ namespace FNet.Settings.Models
             }
             return json;
         }
-        public static String Set(RequestPackage rqp)
+        public static void Set(RequestPackage rqp)
         {
-            String json = "{}";
             if (rqp != null)
             {
                 Guid sessionId = rqp.SessionId;
@@ -35,9 +34,7 @@ namespace FNet.Settings.Models
                         UpdateSettingRow(sessionId, p.Name, p.Value);
                     }
                 }
-                json = Get(sessionId);
             }
-            return json;
         }
         private static void UpdateSettingRow(Guid sessionId, String name, Object value)
         {

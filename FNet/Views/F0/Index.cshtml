@@ -5,7 +5,7 @@
     }
 </style>
 <div id="fnet_settings_f0">
-    <input type="hidden" id="fnet_settings_f0_data" value="@Html.Raw(Model)" />
+    <input type="hidden" id="fnet_settings_f0_data" value="@Html.Raw(Model.Replace("\"", "'"))" />
     <table>
         <tr>
             <td colspan="3">Шрифт для выгрузки в Excel</td>
@@ -14,7 +14,7 @@
             <td style="width: 40px;"></td>
             <td style="text-align: right">Наименование</td>
             <td>
-                <input type="text" name="[Шрифт для выгрузки в Excel].[Наименование]" value=""
+                <input type="text" class="data" name="[Шрифт для выгрузки в Excel].[Наименование]" value=""
                        style="width: 200px;" />
             </td>
         </tr>
@@ -22,7 +22,7 @@
             <td style="width: 40px;"></td>
             <td style="text-align: right">Размер</td>
             <td>
-                <input type="text" name="[Шрифт для выгрузки в Excel].[Размер]" value=""
+                <input type="text" class="data" name="[Шрифт для выгрузки в Excel].[Размер]" value=""
                        style="width: 200px; text-align: right; width: 30px"
                        onchange="Nskd.Validator.nNorm(this);" /><span>pt</span>
             </td>
@@ -35,7 +35,7 @@
             <td style="width: 40px;"></td>
             <td style="text-align: right">Общий</td>
             <td>
-                <input type="text" name="[Масштаб для выгрузки в Excel].[Общий]" value=""
+                <input type="text" class="data" name="[Масштаб для выгрузки в Excel].[Общий]" value=""
                        style="width: 200px; text-align: right; width: 30px"
                        onchange="Nskd.Validator.nNorm(this);" /><span>%</span>
             </td>
@@ -44,14 +44,16 @@
         <tr>
             <td colspan="2" style="width: 100px">Использовать архив при поиске лекарственных средств</td>
             <td style="vertical-align: bottom">
-                <input type="checkbox" />
+                <input type="checkbox" class="data" name="Использовать архив при поиске лекарственных средств" />
             </td>
         </tr>
         <tr><td>&nbsp;</td></tr>
         <tr>
             <td colspan="2" style="width: 100px">Скидка при оформлении передачи из ООО "Фарм-Сиб" в ООО "Гарза"</td>
             <td style="vertical-align: bottom">
-                <input type="text" value="5" style="width: 30px; text-align: right" /><span>%</span>
+                <input type="text" class="data" name="Скидка при оформлении передачи из Фарм-Сиб в Гарза" value="" 
+                       style="width: 30px; text-align: right"
+                       onchange="Nskd.Validator.nNorm(this);"/><span>%</span>
             </td>
         </tr>
         <tr><td>&nbsp;</td></tr>
@@ -63,17 +65,15 @@
 </div>
 <script type="text/javascript">
     var SettingsF0 = (function () {
-
         var ds = eval('(' + $('#fnet_settings_f0_data').val() + ')');
         var dt = (ds && ds.tables && ds.tables.length > 0) ? ds.tables[0] : null;
-        var inputs = $('#fnet_settings_f0 input[type="text"]');
-        var inputArch = $('#fnet_settings_f0 input[type="checkbox"]');
+        var dataInputs = $('#fnet_settings_f0 input.data');
         var saveButton = $('#fnet_settings_f0 input[type="button"][value="Сохранить"]');
 
-        inputs.keyup(function () {
+        dataInputs.keyup(function () {
             saveButton.prop("disabled", false);
         });
-        inputArch.change(function () {
+        dataInputs.change(function () {
             saveButton.prop("disabled", false);
         });
 
@@ -83,17 +83,19 @@
             if (dt != null) {
                 for (var ri = 0; ri < dt.rows.length; ri++) {
                     var row = dt.rows[ri];
-                    inputs.each(function (i, e) {
+                    dataInputs.each(function (i, e) {
                         if (e.name == row.itemArray[2]) {
-                            e.value = row.itemArray[3];
+                            if (e.type == 'text') {
+                                e.value = row.itemArray[3];
+                            } else if (e.type == 'checkbox') {
+                                if (row.itemArray[3] == '1') {
+                                    $(e).prop('checked', true);
+                                } else {
+                                    $(e).prop('checked', false);
+                                }
+                            }
                         }
                     });
-                    if (row.itemArray[2] == 'Использовать архив при поиске лекарственных средств'
-                        && row.itemArray[3] == '1') {
-                        inputArch.prop('checked', true);
-                    } else {
-                        inputArch.prop('checked', false);
-                    }
                 }
             }
         }
@@ -101,22 +103,20 @@
             if (dt != null) {
                 for (var ri = 0; ri < dt.rows.length; ri++) {
                     var row = dt.rows[ri];
-                    inputs.each(function (i, e) {
+                    dataInputs.each(function (i, e) {
                         if (e.name == row.itemArray[2]) {
-                            var newValue = e.value;
+                            var newValue = null;
+                            if (e.type == 'text') {
+                                newValue = e.value;
+                            } else if (e.type == 'checkbox') {
+                                newValue = $(e).prop('checked') ? '1' : '0';
+                            }
                             if (row.itemArray[3] != newValue) {
                                 row.itemArray[3] = newValue;
                                 row.rowState = 'Modified';
                             }
                         }
                     });
-                    if (row.itemArray[2] == 'Использовать архив при поиске лекарственных средств') {
-                        var newValue = inputArch.prop('checked') ? '1' : '0';
-                        if (row.itemArray[3] != newValue) {
-                            row.itemArray[3] = newValue;
-                            row.rowState = 'Modified';
-                        }
-                    }
                 }
             }
         }
@@ -144,8 +144,8 @@
                         refreshForm();
                     }
                 });
-                inputs.val('');
-                inputArch.prop('checked', false);
+                dataInputs.val('');
+                dataInputs.prop('checked', false);
                 dt = null;
             }
         };

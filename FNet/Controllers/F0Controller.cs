@@ -13,17 +13,15 @@ namespace FNet.Settings.Controllers
             if (Request.RequestType != "POST") { return ""; }
             RequestPackage rqp = RequestPackage.ParseRequest(Request.InputStream, Request.ContentEncoding);
             String settingsDsAsJsonString = F0Model.Get(rqp.SessionId);
-            settingsDsAsJsonString = settingsDsAsJsonString.Replace("\"", "'");
             v = PartialView("~/Views/F0/Index.cshtml", settingsDsAsJsonString);
             return v;
         }
-        /*
         public Object Save()
         {
             RequestPackage rqp = RequestPackage.ParseRequest(Request.InputStream, Request.ContentEncoding);
-            String settingsDsAsJsonString = F0Model.Set(rqp);
+            F0Model.Set(rqp);
+            String settingsDsAsJsonString = F0Model.Get(rqp.SessionId);
             return settingsDsAsJsonString;
         }
-        */
     }
 }
