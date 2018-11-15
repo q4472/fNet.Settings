@@ -7,12 +7,12 @@ namespace FNet.Settings.Controllers
 {
     public class F0Controller : Controller
     {
-        public Object Index()
+        public Object Index(Guid sessionId)
         {
             Object v = null;
             if (Request.RequestType != "POST") { return ""; }
-            RequestPackage rqp = RequestPackage.ParseRequest(Request.InputStream, Request.ContentEncoding);
-            String settingsDsAsJsonString = F0Model.Get(rqp.SessionId);
+            //RequestPackage rqp = RequestPackage.ParseRequest(Request.InputStream, Request.ContentEncoding);
+            String settingsDsAsJsonString = F0Model.Get(sessionId);
             v = PartialView("~/Views/F0/Index.cshtml", settingsDsAsJsonString);
             return v;
         }

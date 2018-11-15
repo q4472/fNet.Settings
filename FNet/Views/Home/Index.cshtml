@@ -12,6 +12,9 @@
                 var rqp = {
                     SessionId: Nskd.Server.SessionId
                 };
+                Nskd.Client.EnvVars.selectedMenuNodeUrl = '/settings/f0/';
+                Nskd.Server.gotoTheNewPage(null, '#_layout_content');
+                /*
                 Nskd.Http.post({
                     url: '/settings/f0/',
                     rqp: rqp,
@@ -20,6 +23,7 @@
                         $('#_layout_content').html(data);
                     }
                 });
+                */
             }
         };
     })();
